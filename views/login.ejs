@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up | URL Shortener</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        }
+
+        /* MAIN CARD */
+        .main-card {
+            width: 1000px;
+            height: 600px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        /* LEFT SIDE */
+        .left {
+            flex: 1.2;   /* expanded */
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .left img {
+            width: 85%;
+            max-width: 500px;
+        }
+
+        /* RIGHT SIDE */
+        .right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .form-box h2 {
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #4f46e5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+        }
+
+        .login-link {
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #4f46e5;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .main-card {
+                width: 95%;
+                height: auto;
+                flex-direction: column;
+            }
+
+            .left {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+
+    <!-- LEFT SIDE -->
+    <div class="left">
+        <img src="https://illustrations.popsy.co/amber/digital-nomad.svg" alt="Signup Illustration">
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+        <div class="form-box">
+
+            <h2>Welcome Back! login here now!</h2>
+
+            <% if (typeof error !== "undefined") { %>
+                <p style="color:red; margin-bottom:10px;"><%= error %></p>
+            <% } %>
+
+            <form action="/user/login" method="POST">
+
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" name="email"
+                        value="<%= typeof oldData !== 'undefined' ? oldData.email : '' %>"
+                        required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+
+                <button type="submit" class="btn">Log In</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account?
+                <a href="/login">Login</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

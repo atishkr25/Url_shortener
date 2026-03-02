@@ -1,5 +1,7 @@
 const {nanoid} = require("nanoid");
 const URL = require('../models/url')
+
+
 async function handleGenerateNewShortURL(req , res){
     const shortID = nanoid(8);
     const body = req.body;
@@ -11,10 +13,9 @@ async function handleGenerateNewShortURL(req , res){
         shortId : shortID,
         redirectURL : body.url,
         visitHistory : []
-   });
-
-    const allURL = await URL.find({});
-    return res.render('home', { allURL, id: shortID });
+    });
+    // Store the last generated shortID in session or flash (optional), or just redirect
+    return res.redirect('/');
 }
 
 async function handleGetAnalytics(req , res){

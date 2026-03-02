@@ -2,7 +2,7 @@ const express = require('express');
 const URL = require('../models/url');
 const router = express.Router();
 
-// SSR route to render home page with all URLs
+// SSR(server side rendering) route to render home page with all URLs
 router.get('/', async (req, res) => {
     try {
         const allURL = await URL.find({});
@@ -12,5 +12,13 @@ router.get('/', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.get('/signup', (req, res) => {
+    return res.render("signup");
+})
+router.get('/login', (req, res) => {
+    return res.render("login");
+})
+
 
 module.exports = router;

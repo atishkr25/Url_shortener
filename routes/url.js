@@ -1,8 +1,13 @@
 const express = require('express');
-const {handleGenerateNewShortURL , handleGetAnalytics} = require("../controllers/url")
+const URL = require('../models/url');
+const { handleGenerateNewShortURL, handleGetAnalytics } = require("../controllers/url")
 const router = express.Router();
 
-router.post('/' , handleGenerateNewShortURL)
-router.get('/analytics/:shortId',handleGetAnalytics )
+router.post('/', handleGenerateNewShortURL)
+router.get('/', async (req, res) => {
+	const allURL = await URL.find({});
+	res.render('home', { allURL, id: null });
+});
+router.get('/analytics/:shortId', handleGetAnalytics)
 
 module.exports = router;
