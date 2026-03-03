@@ -3,55 +3,458 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>LinkSnip | URL Shortener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            background-attachment: fixed;
         }
-        table {
-            border-collapse: collapse;
+
+        /* ── NAVBAR ── */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 48px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo span {
+            color: #a5f3fc;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 9px 22px;
+            border-radius: 50px;
+            transition: 0.25s;
+        }
+
+        .nav-links .btn-ghost {
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.5);
+        }
+
+        .nav-links .btn-ghost:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .nav-links .btn-solid {
+            background: white;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .nav-links .btn-solid:hover {
+            background: #e0e7ff;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            padding: 70px 20px 50px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 18px;
+            border-radius: 50px;
+            margin-bottom: 22px;
+            border: 1px solid rgba(255,255,255,0.3);
+            letter-spacing: 0.3px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: #a5f3fc;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+        }
+
+        /* ── URL FORM ── */
+        .url-form-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .url-form {
+            display: flex;
             width: 100%;
-            margin-top: 16px;
+            max-width: 680px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+
+        .url-form input {
+            flex: 1;
+            padding: 18px 24px;
+            font-size: 15px;
+            border: none;
+            outline: none;
+            color: #333;
+            font-family: 'Poppins', sans-serif;
         }
+
+        .url-form input::placeholder {
+            color: #aaa;
+        }
+
+        .url-form button {
+            padding: 18px 32px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .url-form button:hover {
+            opacity: 0.9;
+        }
+
+        /* ── NEW LINK BANNER ── */
+        .new-link-banner {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .new-link-box {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 14px 28px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .new-link-box a {
+            color: #a5f3fc;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .new-link-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── TABLE SECTION ── */
+        .table-section {
+            max-width: 1100px;
+            margin: 50px auto 60px;
+            padding: 0 24px;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .table-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e1e2e;
+        }
+
+        .table-header .count-badge {
+            background: #ede9fe;
+            color: #4f46e5;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 50px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: #f8f7ff;
+        }
+
         th {
-            background-color: #f4f4f4;
+            padding: 14px 24px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        td {
+            padding: 16px 24px;
+            font-size: 14px;
+            color: #444;
+            border-top: 1px solid #f5f5f5;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #fafaff;
+        }
+
+        .short-id-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ede9fe;
+            color: #4f46e5;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .short-id-link:hover {
+            background: #ddd6fe;
+        }
+
+        .redirect-url {
+            max-width: 480px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #555;
+        }
+
+        .redirect-url a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .redirect-url a:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+
+        .clicks-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #ecfdf5;
+            color: #059669;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 5px 14px;
+            border-radius: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+        }
+
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 15px;
+        }
+
+        /* ── STATS STRIP ── */
+        .stats-strip {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding: 0 24px 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 22px 36px;
+            text-align: center;
+            color: white;
+            min-width: 160px;
+        }
+
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: 800;
+            color: #a5f3fc;
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
-    <h2>URL Shortener</h2>
-    <form action="/url" method="POST">
-        <input type="text" name="url" placeholder="Enter URL to shorten" style="width: 300px; padding: 5px;">
-        <button type="submit" style="padding: 5px 10px;">Enter</button>
-    </form>
 
-    <% if (id) { %>
-        <p>Short URL generated: <a href="/<%= id %>">http://localhost:8002/<%= id %></a></p>
-    <% } %>
+    <!-- NAVBAR -->
+    <nav>
+        <a href="/" class="nav-logo">Link<span>Snip</span></a>
+        <div class="nav-links">
+            <a href="/login" class="btn-ghost">Login</a>
+            <a href="/signup" class="btn-solid">Sign Up</a>
+        </div>
+    </nav>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Short ID</th>
-                <th>Redirect URL</th>
-                <th>Total Clicks</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% allURL.forEach((url) => { %>
-                <tr>
-                    <td><a href="/<%= url.shortId %>"><%= url.shortId %></a></td>
-                    <td><%= url.redirectURL %></td>
-                    <td><%= url.visitHistory.length %></td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-</body> 
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <div class="hero-badge">&#9889; Fast, Free & Reliable URL Shortener</div>
+        <h1>Shorten Your Links,<br><span>Amplify Your Reach</span></h1>
+        <p>Paste your long URL below and get a clean, shareable link instantly.</p>
+
+        <div class="url-form-wrapper">
+            <form action="/url" method="POST" class="url-form">
+                <input type="text" name="url" placeholder="https://your-long-url.com/paste-here..." required>
+                <button type="submit">&#8594; Shorten It</button>
+            </form>
+        </div>
+
+        <% if (id) { %>
+        <div class="new-link-banner">
+            <div class="new-link-box">
+                &#10003; Your short link is ready:&nbsp;
+                <a href="/<%= id %>" target="_blank">http://localhost:8002/<%= id %></a>
+            </div>
+        </div>
+        <% } %>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+        <div class="stat-card">
+            <div class="stat-number"><%= allURL.length %></div>
+            <div class="stat-label">Links Created</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number"><%= allURL.reduce((sum, u) => sum + u.visitHistory.length, 0) %></div>
+            <div class="stat-label">Total Clicks</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">&#9889; Fast</div>
+            <div class="stat-label">Instant Redirect</div>
+        </div>
+    </div>
+
+    <!-- TABLE SECTION -->
+    <div class="table-section">
+        <div class="table-card">
+            <div class="table-header">
+                <h3>All Shortened Links</h3>
+                <span class="count-badge"><%= allURL.length %> links</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Short ID</th>
+                        <th>Original URL</th>
+                        <th>Total Clicks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (allURL.length === 0) { %>
+                        <tr>
+                            <td colspan="3">
+                                <div class="empty-state">
+                                    <div class="icon">&#128279;</div>
+                                    <p>No links yet. Shorten your first URL above!</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <% } else { %>
+                        <% allURL.forEach((url) => { %>
+                        <tr>
+                            <td>
+                                <a href="/<%= url.shortId %>" class="short-id-link" target="_blank">
+                                    &#128279; <%= url.shortId %>
+                                </a>
+                            </td>
+                            <td class="redirect-url">
+                                <a href="<%= url.redirectURL %>" target="_blank"><%= url.redirectURL %></a>
+                            </td>
+                            <td>
+                                <span class="clicks-badge">&#9654; <%= url.visitHistory.length %></span>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
 </html>

@@ -12,7 +12,8 @@ const app = express();
 const PORT = 8002;
 
 connectToMongoDB('mongodb://127.0.0.1:27017/short-url')
-.then (()=> console.log("MongoDB connected"));
+.then(() => console.log("MongoDB connected"))
+.catch((err) => console.log("MongoDB connection failed:", err.message));
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true})) // for parsing form data
