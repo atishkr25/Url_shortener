@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+
 
 async function handleUserSignup(req, res) {
     const { name, email, password } = req.body;
@@ -37,6 +39,12 @@ async function handleUserLogin(req, res) {
         if (!user) {
             return res.status(401).render('login', { error: 'Invalid email or password.' });
         }
+        const token = jwt.sign(
+            {id: user._id, email:user.email},
+            process.env.JWT_SECRET,
+            {expiresIn: '1d'}
+        );
+        res.cookie('token', token, {httpOnly: true});
         return res.redirect('/');
     } catch (error) {
         console.error('Login error:', error.message);
