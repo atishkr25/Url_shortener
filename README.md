@@ -49,6 +49,9 @@ npm run dev
 
 Open `http://localhost:8002` in your browser.
 
+## overview
+<img width="1468" height="883" alt="Screenshot 2026-03-10 at 11 32 17 AM" src="https://github.com/user-attachments/assets/cbb6f92e-0d6b-4587-a916-37e7a6edabd1" />
+
 ## Usage
 1. Go to `/signup` and create an account.
 2. Login from `/login`.
@@ -70,8 +73,6 @@ Open `http://localhost:8002` in your browser.
 - `GET /url/analytics/:shortId` - Get click analytics for a short URL.
 
 - `GET /:shortId` - Redirect short code to original URL.
-## overview
-<img width="1468" height="883" alt="Screenshot 2026-03-10 at 11 32 17 AM" src="https://github.com/user-attachments/assets/cbb6f92e-0d6b-4587-a916-37e7a6edabd1" />
 
 ## Architecture
 <img width="821" height="535" alt="architecture" src="https://github.com/user-attachments/assets/5520caa1-3602-45f0-9705-80cf2bdd6a0c" />
