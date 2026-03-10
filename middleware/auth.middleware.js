@@ -11,7 +11,6 @@ function checkAuth(req, res, next) {
         req.user=decoded;
         next();
     } catch(err){
-        
         return res.redirect('/login');
     }
 }

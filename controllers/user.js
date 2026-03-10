@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 
 async function handleUserSignup(req, res) {
@@ -17,10 +18,10 @@ async function handleUserSignup(req, res) {
             return res.status(409).render('signup', { error: 'Email already registered. Please login.' });
         }
 
-        await User.create({ name, email, password });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.create({ name, email, password: hashedPassword });
 
-        // Redirect to home after successful signup
-        return res.redirect('/');
+        return res.redirect('/login');
     } catch (error) {
         console.error('Signup error:', error.message);
         return res.status(500).render('signup', { error: 'Something went wrong. Please try again.' });
@@ -35,16 +36,22 @@ async function handleUserLogin(req, res) {
     }
 
     try {
-        const user = await User.findOne({ email, password });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).render('login', { error: 'Invalid email or password.' });
         }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).render('login', { error: 'Invalid email or password.' });
+        }
+
         const token = jwt.sign(
-            {id: user._id, email:user.email},
+            { id: user._id, email: user.email, name: user.name },
             process.env.JWT_SECRET,
-            {expiresIn: '1d'}
+            { expiresIn: '1d' }
         );
-        res.cookie('token', token, {httpOnly: true});
+        res.cookie('token', token, { httpOnly: true });
         return res.redirect('/');
     } catch (error) {
         console.error('Login error:', error.message);
