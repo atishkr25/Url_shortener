@@ -121,19 +121,31 @@
         .url-form-wrapper {
             display: flex;
             justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
         .url-form {
-            display: flex;
+            display: block;
             width: 100%;
             max-width: 680px;
             background: white;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            padding: 12px;
         }
 
-        .url-form input {
+        .url-form-main {
+            display: flex;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #eceff9;
+        }
+
+        .url-form-main input {
             flex: 1;
             padding: 18px 24px;
             font-size: 15px;
@@ -143,11 +155,11 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .url-form input::placeholder {
+        .url-form-main input::placeholder {
             color: #aaa;
         }
 
-        .url-form button {
+        .url-form-main button {
             padding: 18px 32px;
             background: linear-gradient(135deg, #4f46e5, #06b6d4);
             color: white;
@@ -160,8 +172,50 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .url-form button:hover {
+        .url-form-main button:hover {
             opacity: 0.9;
+        }
+
+        .custom-slug-wrapper {
+            width: 100%;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .custom-slug-wrapper label {
+            display: inline-block;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.92);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .custom-slug-wrapper input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.18);
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .custom-slug-wrapper input::placeholder {
+            color: rgba(255,255,255,0.75);
+        }
+
+        .error-banner {
+            width: 100%;
+            max-width: 680px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(248, 113, 113, 0.55);
+            color: #fee2e2;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
         }
 
         /* ── NEW LINK BANNER ── */
@@ -311,6 +365,22 @@
             border-radius: 8px;
         }
 
+        .analytics-link {
+            text-decoration: none;
+            background: #7c3aed;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 7px 12px;
+            border-radius: 8px;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .analytics-link:hover {
+            background: #6d28d9;
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -382,10 +452,23 @@
         <p>Paste your long URL below and get a clean, shareable link instantly.</p>
 
         <div class="url-form-wrapper">
-            <form action="/url" method="POST" class="url-form">
-                <input type="text" name="url" placeholder="https://your-long-url.com/paste-here..." required>
-                <button type="submit">&#8594; Shorten It</button>
+            <form id="shortenForm" action="/url" method="POST" class="url-form">
+                <div class="url-form-main">
+                    <input type="text" name="url" placeholder="https://your-long-url.com/paste-here..." required>
+                    <button type="submit">&#8594; Shorten It</button>
+                </div>
+                <div class="custom-slug-wrapper">
+                    <label for="customSlug">Custom alias (optional)</label>
+                    <input id="customSlug" type="text" name="customSlug" placeholder="custom-alias (optional)">
+                </div>
             </form>
+
+            <% if (error === 'slug_taken') { %>
+                <div class="error-banner">This custom alias is already taken. Please choose another one.</div>
+            <% } %>
+            <% if (error === 'slug_invalid') { %>
+                <div class="error-banner">Invalid alias. Use only letters, numbers, and hyphens (3 to 30 chars).</div>
+            <% } %>
         </div>
 
         <% if (id) { %>
@@ -427,12 +510,13 @@
                         <th>Short ID</th>
                         <th>Original URL</th>
                         <th>Total Clicks</th>
+                        <th>Analytics</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% if (allURL.length === 0) { %>
                         <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                                 <div class="empty-state">
                                     <div class="icon">&#128279;</div>
                                     <p>No links yet. Shorten your first URL above!</p>
@@ -452,6 +536,9 @@
                             </td>
                             <td>
                                 <span class="clicks-badge">&#9654; <%= url.visitHistory.length %></span>
+                            </td>
+                            <td>
+                                <a href="/url/analytics/<%= url.shortId %>" class="analytics-link">View Analytics</a>
                             </td>
                         </tr>
                         <% }) %>

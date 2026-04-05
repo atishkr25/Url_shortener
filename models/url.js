@@ -12,9 +12,41 @@ const urlSchema = new mongoose.Schema(
         required : true,
     },
     visitHistory: [
-        { timestamp : {
-            type : Number
-        }}
+        {
+            timestamp: {
+                type: Number,
+                required: true,
+            },
+            ip: {
+                type: String,
+                default: 'Unknown',
+            },
+            country: {
+                type: String,
+                default: 'Unknown',
+            },
+            city: {
+                type: String,
+                default: 'Unknown',
+            },
+            device: {
+                type: String,
+                enum: ['mobile', 'tablet', 'desktop'],
+                default: 'desktop',
+            },
+            browser: {
+                type: String,
+                default: 'Unknown',
+            },
+            os: {
+                type: String,
+                default: 'Unknown',
+            },
+            referrer: {
+                type: String,
+                default: 'Direct',
+            },
+        }
     ],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

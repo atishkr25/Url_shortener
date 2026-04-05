@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
             }
         }
 
-        res.render('home', { allURL, user, id: null });
+        res.render('home', { allURL, user, id: null, error: req.query.error || null });
     } catch (error) {
         console.error('Error fetching URLs:', error);
         res.status(500).send('Internal Server Error');
